@@ -52,7 +52,12 @@ export function App() {
   //##Bug 6##
   //handle view more button bug
    async function handleViewMore() {
-     await loadAllTransactions()
+     
+     if (transactions?.length >= 14) {
+       setShowViewMore(false)
+     } else {
+       await loadAllTransactions()
+     }
   }
 
   return (
@@ -77,6 +82,7 @@ export function App() {
               return
             }
             await loadTransactionsByEmployee(newValue.id)
+            setShowViewMore(false)
           }}/>
 
         <div className="RampBreak--l" />
@@ -84,11 +90,11 @@ export function App() {
         <div className="RampGrid">
           <Transactions transactions={transaction} />
 
-          {showViewMore ? null : (
+          {!showViewMore ? null : (
             <button
               className="RampButton"
               disabled={paginatedTransactionsUtils.loading}
-              onClick={() => handleViewMore()}
+              onClick={handleViewMore}
             >
               View More
             </button>
